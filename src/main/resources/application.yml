@@ -1,0 +1,30 @@
+server:
+ port: 8081  # Importante: Muda a porta para nao bater com o Keycloak (8080)
+
+spring:
+ application:
+  name: TrainApp-backend
+
+ # Configuracao do Banco de Dados (Isso resolve o erro "url not specified")
+ datasource:
+  url: jdbc:postgresql://localhost:5432/${APP_DB_NAME:application}  # O banco da sua aplicacao
+  username: ${APP_DB_USER:postgres}
+  password: ${APP_DB_PASSWORD:postgres}  # <-- Coloque a senha que voce usa no seu Postgres local
+  driver-class-name: org.postgresql.Driver
+
+ jpa:
+  hibernate:
+   ddl-auto: update # Cria as tabelas automaticamente
+  show-sql: true
+  properties:
+   hibernate:
+    format_sql: true
+
+ security:
+  oauth2:
+   resourceserver:
+    jwt:
+     # URL do seu Realm no Keycloak
+     issuer-uri: http://localhost:8080/realms/TrainApp
+     # URL para baixar as chaves publicas (JWK Set) e validar a assinatura do token
+     jwk-set-uri: http://localhost:8080/realms/TrainApp/protocol/openid-connect/certs
