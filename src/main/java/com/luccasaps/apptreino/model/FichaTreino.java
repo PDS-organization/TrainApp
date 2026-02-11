@@ -28,7 +28,7 @@ public class FichaTreino {
     @JoinColumn(name = "personal_id", nullable = false)
     private User personalId;
 
-    @OneToMany(mappedBy = "fichaId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fichaTreino", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemTreino> itens = new ArrayList<>();
 
     @Column(name = "nome", nullable = false)
