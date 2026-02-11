@@ -2,13 +2,16 @@ package com.luccasaps.apptreino.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "Item_Treino", schema = "public")
+@Table(name = "item_treino", schema = "public")
 @EntityListeners(AuditingEntityListener.class)
 public class ItemTreino {
 
@@ -17,23 +20,26 @@ public class ItemTreino {
     @Column(nullable = false)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ficha_id", nullable = false)
-    private FichaTreino fichaId;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private FichaTreino fichaTreino;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // Geralmente queremos ver o nome do exercício
     @JoinColumn(name = "exercicio_id", nullable = false)
-    private Exercicio exerciciosId;
+    private Exercicio exercicio;
 
-    @Column(nullable = false)
-    private Integer series;
+    @OneToMany(mappedBy = "itemTreino", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Serie> series;
 
-    @Column(nullable = false)
-    private Integer repeticoes;
-
-    @Column(nullable = false)
-    private Integer carga;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String observacoes;
+
+    public void setFichaId(FichaTreino fichaTreino) {
+        this.fichaTreino = fichaTreino;
+        fichaTreino.getItens().add(this);
+    }
 }
