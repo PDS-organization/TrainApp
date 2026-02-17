@@ -22,13 +22,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Desabilita CSRF (comum em APIs REST stateless)
                 .authorizeHttpRequests(auth -> auth
-                        // Rotas públicas (ex: Swagger ou login se fosse local)
-                        .requestMatchers("/public/**").permitAll()
-                        // Qualquer outra requisição precisa estar autenticada
-                        .anyRequest().authenticated()
+                        .requestMatchers("/public/**").permitAll()  // Rotas públicas (ex: Swagger ou login se fosse local)
+                        .anyRequest().authenticated()   // Qualquer outra requisição precisa estar autenticada
                 )
-                // Configura o servidor de recursos (Resource Server)
-                .oauth2ResourceServer(oauth2 -> oauth2
+
+                .oauth2ResourceServer(oauth2 -> oauth2 // Configura o servidor de recursos (Resource Server)
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 );
 
@@ -37,7 +35,6 @@ public class SecurityConfig {
 
     // Esse conversor pega o token JWT, abre ele, procura "realm_access" -> "roles"
     // e transforma em "ROLE_PERSONAL" ou "ROLE_ALUNO" pro Spring entender.
-
     private Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());

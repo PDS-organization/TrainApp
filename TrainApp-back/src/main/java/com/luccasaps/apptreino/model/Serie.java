@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
@@ -18,15 +19,21 @@ public class Serie {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @OneToOne
+    private Exercicio exercicio;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_treino_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private ItemTreino itemTreino;
+    private FichaTreino fichaTreino;
 
     @Column(nullable = false)
-    private Integer carga;
+    private Double carga;
 
     @Column(nullable = false)
     private Integer repeticoes;
+
+    @CreatedBy()
+    private UUID personalId;
 }

@@ -3,6 +3,7 @@ package com.luccasaps.apptreino.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class FichaTreino {
     private User personalId;
 
     @OneToMany(mappedBy = "fichaTreino", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemTreino> itens = new ArrayList<>();
+    private List<Serie> itens = new ArrayList<>();
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -40,8 +41,7 @@ public class FichaTreino {
     @Column(name = "data_fim")
     private LocalDate dataFim;
 
-    public void adicionarItem(ItemTreino item){
-        itens.add(item);
-        item.setFichaId(this);
+    public void adicionarItem(Serie series){
+        itens.add(series);
     }
 }
