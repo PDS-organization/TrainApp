@@ -9,7 +9,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "exercicios", schema = "public")
 @Data
-@EntityListeners(AuditingEntityListener.class)
 public class Exercicio {
 
     @Id
@@ -19,6 +18,9 @@ public class Exercicio {
 
     @Column(nullable = false)
     private String nome;
+
+    @OneToOne
+    private Serie serie;
 
     @Column(name = "grupo_muscular", nullable = false)
     private String grupoMuscular;
